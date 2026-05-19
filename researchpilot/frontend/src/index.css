@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+:root {
+  --indigo: #6366f1;
+  --indigo-dim: rgba(99,102,241,0.15);
+  --indigo-glow: rgba(99,102,241,0.3);
+  --emerald: #10b981;
+  --emerald-dim: rgba(16,185,129,0.12);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.12);
+  --rose: #f43f5e;
+  --rose-dim: rgba(244,63,94,0.12);
+  --sky: #38bdf8;
+  --sky-dim: rgba(56,189,248,0.12);
+  --violet: #8b5cf6;
+  --violet-dim: rgba(139,92,246,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+
+body {
+  background: #05050a;
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* Selection */
+::selection { background: var(--indigo-dim); color: var(--indigo); }
+
+/* Subtle noise texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.3;
+}
+
+button { cursor: pointer; font-family: inherit; border: none; outline: none; }
+input, textarea, select { font-family: inherit; outline: none; }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px var(--indigo-glow); }
+  50%       { box-shadow: 0 0 20px var(--indigo-glow); }
+}
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes node-activate {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+.animate-fade-in  { animation: fadeIn  0.4s ease forwards; }
+.animate-slide-in { animation: slideIn 0.3s ease forwards; }
+.animate-spin     { animation: spin 0.8s linear infinite; }
+.animate-node     { animation: node-activate 0.4s ease forwards; }
+
+/* Markdown styles inside report panel */
+.markdown-report h1 { font-size: 1.4rem; font-weight: 600; margin: 1.2em 0 0.5em; color: #f1f5f9; }
+.markdown-report h2 { font-size: 1.15rem; font-weight: 600; margin: 1.2em 0 0.4em; color: #e2e8f0; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 4px; }
+.markdown-report h3 { font-size: 1rem; font-weight: 500; margin: 1em 0 0.3em; color: #cbd5e1; }
+.markdown-report p  { margin: 0.6em 0; color: #94a3b8; line-height: 1.8; }
+.markdown-report ul, .markdown-report ol { padding-left: 1.4em; margin: 0.5em 0; }
+.markdown-report li { color: #94a3b8; margin: 0.3em 0; line-height: 1.7; }
+.markdown-report strong { color: #e2e8f0; font-weight: 600; }
+.markdown-report em    { color: #a5b4fc; }
+.markdown-report code  { background: rgba(99,102,241,0.1); color: #a5b4fc; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+.markdown-report blockquote { border-left: 3px solid var(--indigo); margin: 0.8em 0; padding: 0.4em 1em; background: var(--indigo-dim); border-radius: 0 6px 6px 0; }
+.markdown-report blockquote p { color: #a5b4fc; }
