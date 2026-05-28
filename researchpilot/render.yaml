@@ -1,0 +1,52 @@
+services:
+  - type: web
+    name: researchpilot-backend
+    env: python
+    region: oregon
+    plan: free
+    
+    # Build configuration
+    buildCommand: pip install -r requirements.txt
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    
+    # Root directory where Render should look for requirements.txt
+    rootDir: backend
+    
+    # Health check
+    healthCheckPath: /api/health
+    
+    # Environment variables
+    envVars:
+      - key: GROQ_API_KEY
+        scope: "build,run"
+        sync: false
+      - key: TAVILY_API_KEY
+        scope: "build,run"
+        sync: false
+      - key: OPENROUTER_API_KEY
+        scope: "build,run"
+        sync: false
+      - key: DATABASE_URL
+        scope: "run"
+        sync: false
+      - key: CORS_ORIGINS
+        scope: "run"
+        value: "https://your-site.netlify.app,http://localhost:5173"
+      - key: CHROMA_PERSIST_DIR
+        scope: "run"
+        value: "/var/data/chroma"
+      - key: UPLOAD_DIR
+        scope: "run"
+        value: "/var/data/uploads"
+      - key: PRIMARY_MODEL
+        scope: "run"
+        value: "llama-3.3-70b-versatile"
+      - key: FAST_MODEL
+        scope: "run"
+        value: "mixtral-8x7b-32768"
+      - key: CRITIC_MODEL
+        scope: "run"
+        value: "llama-3.3-70b-versatile"
+      - key: EMBEDDING_MODEL
+        scope: "run"
+        value: "all-MiniLM-L6-v2"

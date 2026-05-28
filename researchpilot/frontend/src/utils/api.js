@@ -1,13 +1,25 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: '/api', timeout: 120000 })
+// Get API base URL from environment or default to relative path
+const getApiBaseUrl = () => {
+  // In production (Netlify), use VITE_API_URL if set
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL
+  }
+  // In development, use relative path (proxied by vite)
+  return '/api'
+}
+
+const API_BASE_URL = getApiBaseUrl()
+const api = axios.create({ baseURL: API_BASE_URL, timeout: 120000 })
 
 // ── Research ───────────────────────────────────────────────────────────────────
 
 export const streamResearch = (request, onTrace, onResult, onError) => {
   const params = new URLSearchParams()
   // POST via fetch for SSE
-  return fetch('/api/research', {
+  const url = `${API_BASE_URL}/research`
+  return fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(request),
@@ -74,8 +86,8 @@ export const listDocuments   = () => api.get('/documents').then(r => r.data)
 export const deleteDocument  = filename => api.delete(`/documents/${encodeURIComponent(filename)}`).then(r => r.data)
 
 // ── Export ─────────────────────────────────────────────────────────────────────
-
-export const exportMarkdown  = id => `/api/export/markdown/${id}`
+${API_BASE_URL}/export/markdown/${id}`
+export const exportPDF       = id => `${API_BASE_URL}/export/markdown/${id}`
 export const exportPDF       = id => `/api/export/pdf/${id}`
 
 // ── Health ─────────────────────────────────────────────────────────────────────
