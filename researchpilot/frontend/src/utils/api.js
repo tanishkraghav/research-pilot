@@ -86,9 +86,8 @@ export const listDocuments   = () => api.get('/documents').then(r => r.data)
 export const deleteDocument  = filename => api.delete(`/documents/${encodeURIComponent(filename)}`).then(r => r.data)
 
 // ── Export ─────────────────────────────────────────────────────────────────────
-${API_BASE_URL}/export/markdown/${id}`
-export const exportPDF       = id => `${API_BASE_URL}/export/markdown/${id}`
-export const exportPDF       = id => `/api/export/pdf/${id}`
+export const exportMarkdown = id => `${API_BASE_URL}/export/markdown/${id}`
+export const exportPDF = id => `${API_BASE_URL}/export/pdf/${id}`
 
 // ── Health ─────────────────────────────────────────────────────────────────────
 

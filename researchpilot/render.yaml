@@ -1,6 +1,21 @@
 services:
   - type: web
     name: researchpilot-backend
+    env: docker
+    branch: main
+    dockerfilePath: backend/Dockerfile
+    plan: free
+
+  - type: static
+    name: researchpilot-frontend
+    env: static
+    branch: main
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    plan: free
+services:
+  - type: web
+    name: researchpilot-backend
     env: python
     region: oregon
     plan: free
