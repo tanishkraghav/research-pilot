@@ -1,0 +1,71 @@
+name: Build and Deploy to Render
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+  trigger_render_deploy:
+    needs: build_frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger Render backend deploy
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_BACKEND_SERVICE_ID: ${{ secrets.RENDER_BACKEND_SERVICE_ID }}
+        run: |
+          if [ -z "$RENDER_API_KEY" ] || [ -z "$RENDER_BACKEND_SERVICE_ID" ]; then
+            echo "Missing Render secrets; skipping backend deploy"
+            exit 0
+          fi
+          curl -s -X POST "https://api.render.com/v1/services/${RENDER_BACKEND_SERVICE_ID}/deploys" \
+            -H "Authorization: Bearer ${RENDER_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d '{}' | jq .
+
+      - name: Trigger Render frontend deploy
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_FRONTEND_SERVICE_ID: ${{ secrets.RENDER_FRONTEND_SERVICE_ID }}
+        run: |
+          if [ -z "$RENDER_API_KEY" ] || [ -z "$RENDER_FRONTEND_SERVICE_ID" ]; then
+            echo "Missing Render secrets; skipping frontend deploy"
+            exit 0
+          fi
+          curl -s -X POST "https://api.render.com/v1/services/${RENDER_FRONTEND_SERVICE_ID}/deploys" \
+            -H "Authorization: Bearer ${RENDER_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d '{}' | jq .
+
+# Required repository secrets:
+# - RENDER_API_KEY: Render account API key
+# - RENDER_BACKEND_SERVICE_ID: Render service ID for backend
+# - RENDER_FRONTEND_SERVICE_ID: Render service ID for frontend
