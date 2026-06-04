@@ -1,15 +1,17 @@
 services:
   - type: web
     name: researchpilot-backend
-    env: docker
+    env: python
     branch: main
-    dockerfilePath: backend/Dockerfile
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     plan: free
 
   - type: static
     name: researchpilot-frontend
     env: static
     branch: main
-    buildCommand: cd frontend && npm install && npm run build
+    buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/dist
     plan: free
