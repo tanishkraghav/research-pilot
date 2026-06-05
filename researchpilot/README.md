@@ -145,6 +145,17 @@ docker-compose up --build
 
 Opens at **http://localhost:3000** · API docs at **http://localhost:8000/docs**
 
+### Option C: Deploy to Render
+
+This repository includes a `render.yaml` manifest for both the backend and frontend.
+
+1. Create a Render Python web service for the backend using the `backend` directory.
+2. Create a Render static site service for the frontend using the `frontend` directory.
+3. Set the following backend environment variables in Render: `GROQ_API_KEY`, `TAVILY_API_KEY`, `OPENROUTER_API_KEY`, `CORS_ORIGINS`, `DATABASE_URL`, `CHROMA_PERSIST_DIR`, and `UPLOAD_DIR`.
+4. Set `VITE_API_URL` on the frontend service to your deployed backend API URL, for example `https://your-backend.onrender.com/api`.
+
+If you use the included GitHub Actions workflow, it will trigger both backend and frontend deploys using Render service IDs stored in repository secrets.
+
 ---
 
 ## Project Structure
