@@ -15,7 +15,7 @@ langchain-chroma==0.1.4
 
 # Vector store + embeddings
 chromadb==0.5.3
-sentence-transformers==3.0.1
+fastembed==0.3.1
 
 # Web search
 tavily-python==0.3.3

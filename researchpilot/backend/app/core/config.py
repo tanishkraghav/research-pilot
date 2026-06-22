@@ -26,7 +26,7 @@ class Settings(BaseModel):
     ab_model_3: str = "mistralai/mistral-7b-instruct:free"
 
     # Embeddings
-    embedding_model: str = "all-MiniLM-L6-v2"
+    embedding_model: str = "BAAI/bge-small-en-v1.5"
 
     # Storage
     chroma_persist_dir: str = "./data/chroma"
